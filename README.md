@@ -1,38 +1,61 @@
-# WebdriverIO E2E Test Framework
+# Shopping Cart Automation Framework
 
-This project contains end-to-end tests written using WebdriverIO.
+## Overview
+
+A UI test automation framework built with **WebdriverIO, TypeScript, and Mocha** to validate the functionality of a shopping cart web application.
+
+The project uses the Page Object Model (POM), reusable page interactions, data-driven testing, and automated assertions to support maintainable end-to-end testing.
+
+**Application under test:** https://qa-task--oyettijon.replit.app
+
+**Repository:** https://github.com/rohan-ailani/shopping-cart-automation
+
+## Technology Stack
+
+- WebdriverIO for browser automation
+- TypeScript for test development
+- Mocha for test organization and execution
+- expect-webdriverio for assertions
+- Page Object Model for reusable page interactions
+- JSON for external test data
+- Chrome for browser execution
+
+## Project Structure
+
+```text
+shopping-cart-automation/
+├── src/
+│   ├── data/
+│   │   └── accounts.json
+│   ├── pages/
+│   │   ├── loginPage.ts
+│   │   └── storePage.ts
+│   └── specs/
+│       └── accessPage.ts
+├── wdio.conf.ts
+├── tsconfig.json
+├── package.json
+├── package-lock.json
+├── README.md
+└── TEST_CASES.md
+```
+
+### Key Files
+
+- `src/data/accounts.json`: Practice account test data and expected login outcomes.
+- `src/pages/loginPage.ts`: Login page interactions, practice account selection, login, and logout.
+- `src/pages/storePage.ts`: Store page functionality as the framework develops.
+- `src/specs/accessPage.ts`: Automated login page and account access tests.
+- `wdio.conf.ts`: WebdriverIO configuration.
+- `tsconfig.json`: TypeScript compiler configuration.
+- `TEST_CASES.md`: Detailed test cases, steps, expected results, and test coverage.
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
+Install the following:
 
-- [Node.js](https://nodejs.org/) (which includes npm)
+- Node.js and npm
+- Git
+- Google Chrome
 
-## Setup
-
-1.  **Clone the repository:**
-
-    ```bash
-    git clone <repository-url>
-    ```
-
-2.  **Navigate to the project directory:**
-
-    ```bash
-    cd interview_framework
-    ```
-
-3.  **Install the dependencies:**
-    ```bash
-    npm install
-    ```
-
-## Running the Tests
-
-To run the tests, execute the following command from the root of the project:
-
-```bash
-npm run wdio
-```
-
-This command will start the WebdriverIO test runner, which will execute the spec files located in the `src/specs` directory.
+##

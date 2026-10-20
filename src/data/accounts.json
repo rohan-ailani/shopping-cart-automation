@@ -1,0 +1,23 @@
+
+[
+  {
+    "username": "fern_signal",
+    "expectedLogin": true,
+    "description": "Shopper"
+  },
+  {
+    "username": "quiet_lock",
+    "expectedLogin": false,
+    "description": "Locked account"
+  },
+  {
+    "username": "lens_warp",
+    "expectedLogin": true,
+    "description": "Image variation"
+  },
+  {
+    "username": "count_echo",
+    "expectedLogin": true,
+    "description": "Cart badge"
+  }
+]
