@@ -194,3 +194,158 @@ The following scenarios are not yet documented as completed automation and remai
 - Complete checkout and verify order summary
 - Verify order completion and confirmation
 - Validate selected mobile responsive behaviours
+
+### TC-PRODUCT-001: Verify Total Product Count
+
+**Objective:** Confirm that the Products page displays the expected total number of products.
+
+**Preconditions:** The user is logged in successfully with the Shopper practice account.
+
+**Test data:**
+- Expected product count: `12`
+
+**Steps:**
+1. Log in using the Shopper practice account.
+2. Verify that the Products page is displayed.
+3. Locate the product cards.
+4. Count the displayed products.
+5. Compare the actual count against the expected count.
+
+**Expected result:** The Products page displays exactly 12 products.
+
+**Automation status:** Automated.
+
+---
+
+### TC-PRODUCT-002: Verify Product Filtering by Category
+
+**Objective:** Confirm that selecting each available category displays only the products belonging to that category.
+
+**Preconditions:** The user is logged in successfully and the Products page is displayed.
+
+**Test data:**
+
+| Category | Expected product count |
+|---|---:|
+| Apparel | 5 |
+| Accessories | 4 |
+| Gear | 2 |
+| Books | 1 |
+
+**Steps:**
+1. Log in using the Shopper practice account.
+2. Locate the category filter.
+3. Select Apparel.
+4. Verify that five products are displayed.
+5. Repeat the filtering process for Accessories, Gear, and Books.
+6. Verify the displayed product count for each category.
+
+**Expected result:** Each category displays the expected number of products. The category filter updates the product listing according to the selected category.
+
+**Automation status:** Automated.
+
+**Test data source:** `src/data/categories.json`
+
+---
+
+### TC-PRODUCT-003: Verify Product Sorting by Name, A to Z
+
+**Objective:** Confirm that products can be sorted alphabetically in ascending order by product name.
+
+**Preconditions:** The user is logged in successfully and all products are displayed.
+
+**Test data:**
+- Sorting option: `Name: A to Z`
+- Option value: `name-az`
+- Expected direction: Ascending alphabetical order
+
+**Steps:**
+1. Log in using the Shopper practice account.
+2. Locate the product sorting dropdown.
+3. Select `Name: A to Z`.
+4. Retrieve the displayed product names in their current order.
+5. Compare the displayed order with the expected alphabetical order.
+
+**Expected result:** Product names are displayed in ascending alphabetical order.
+
+**Automation status:** Automated.
+
+---
+
+### TC-PRODUCT-004: Verify Product Sorting by Name, Z to A
+
+**Objective:** Confirm that products can be sorted alphabetically in descending order by product name.
+
+**Preconditions:** The user is logged in successfully and all products are displayed.
+
+**Test data:**
+- Sorting option: `Name: Z to A`
+- Option value: `name-za`
+- Expected direction: Descending alphabetical order
+
+**Steps:**
+1. Log in using the Shopper practice account.
+2. Locate the product sorting dropdown.
+3. Select `Name: Z to A`.
+4. Retrieve the displayed product names in their current order.
+5. Compare the displayed order with the expected reverse alphabetical order.
+
+**Expected result:** Product names are displayed in descending alphabetical order.
+
+**Automation status:** Automated.
+
+---
+
+### TC-PRODUCT-005: Verify Product Sorting by Price, Low to High
+
+**Objective:** Confirm that products can be sorted by price in ascending order.
+
+**Preconditions:** The user is logged in successfully and all products are displayed.
+
+**Test data:**
+- Sorting option: `Price: Low to High`
+- Option value: `price-low`
+- Expected direction: Ascending numerical order
+
+**Steps:**
+1. Log in using the Shopper practice account.
+2. Locate the product sorting dropdown.
+3. Select `Price: Low to High`.
+4. Retrieve the displayed product prices.
+5. Compare the displayed order with the expected ascending numerical order.
+
+**Expected result:** Products are displayed from the lowest price to the highest price.
+
+**Automation status:** Automated.
+
+---
+
+### TC-PRODUCT-006: Verify Product Sorting by Price, High to Low
+
+**Objective:** Confirm that products can be sorted by price in descending order.
+
+**Preconditions:** The user is logged in successfully and all products are displayed.
+
+**Test data:**
+- Sorting option: `Price: High to Low`
+- Option value: `price-high`
+- Expected direction: Descending numerical order
+
+**Steps:**
+1. Log in using the Shopper practice account.
+2. Locate the product sorting dropdown.
+3. Select `Price: High to Low`.
+4. Retrieve the displayed product prices.
+5. Compare the displayed order with the expected descending numerical order.
+
+**Expected result:** Products are displayed from the highest price to the lowest price.
+
+**Actual result:** Products remain displayed in ascending price order, from lowest to highest.
+
+**Automation status:** Automated.
+
+**Test result:** Failed due to a known application defect.
+
+**Defect reference:** BUG-001 in `BUG_REPORT.md`.
+
+**Notes:** The automated test intentionally retains the expected descending order. The assertion should not be changed to match the incorrect application behavior.
