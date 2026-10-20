@@ -58,4 +58,8 @@ Install the following:
 - Git
 - Google Chrome
 
+## Bug Reports
+
+See [BUG_REPORT.md](BUG_REPORT.md) for documented application defects.
+
 ##

@@ -1,0 +1,22 @@
+[
+  {
+    "value": "apparel",
+    "name": "Apparel",
+    "expectedCount": 5
+  },
+  {
+    "value": "accessories",
+    "name": "Accessories",
+    "expectedCount": 4
+  },
+  {
+    "value": "gear",
+    "name": "Gear",
+    "expectedCount": 2
+  },
+  {
+    "value": "books",
+    "name": "Books",
+    "expectedCount": 1
+  }
+]

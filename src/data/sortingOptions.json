@@ -1,0 +1,27 @@
+
+[
+  {
+    "value": "name-az",
+    "name": "Name: A to Z",
+    "sortBy": "name",
+    "direction": "ascending"
+  },
+  {
+    "value": "name-za",
+    "name": "Name: Z to A",
+    "sortBy": "name",
+    "direction": "descending"
+  },
+  {
+    "value": "price-low",
+    "name": "Price: Low to High",
+    "sortBy": "price",
+    "direction": "ascending"
+  },
+  {
+    "value": "price-high",
+    "name": "Price: High to Low",
+    "sortBy": "price",
+    "direction": "descending"
+  }
+]
