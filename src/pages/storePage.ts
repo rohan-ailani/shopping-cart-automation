@@ -1,6 +1,6 @@
 class StorePage {
   async open() {
-    await browser.url("https://automation-interview.vercel.app/");
+    await browser.url("https://qa-task--oyettijon.replit.app");
   }
 }
 
