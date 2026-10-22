@@ -105,4 +105,5 @@ Ensure the required WebdriverIO dependencies and browser setup are available bef
 
 Run the complete test suite:
 
-```
+```bash
+npm run wdio
