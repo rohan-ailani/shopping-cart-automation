@@ -1,0 +1,28 @@
+
+{
+  "validContact": {
+    "firstName": "Rohan",
+    "lastName": "Tester",
+    "postalCode": "M5V 2T6"
+  },
+  "emptyContact": {
+    "firstName": "",
+    "lastName": "",
+    "postalCode": ""
+  },
+  "missingFirstName": {
+    "firstName": "",
+    "lastName": "Tester",
+    "postalCode": "M5V 2T6"
+  },
+  "missingLastName": {
+    "firstName": "Rohan",
+    "lastName": "",
+    "postalCode": "M5V 2T6"
+  },
+  "missingPostalCode": {
+    "firstName": "Rohan",
+    "lastName": "Tester",
+    "postalCode": ""
+  }
+}
