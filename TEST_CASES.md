@@ -63,17 +63,28 @@
 
 ## Execution Notes
 
-**Latest full-suite run:** 3 spec files passed, 2 spec files failed, out of 5 total.
+**Latest full-suite run:** 25 tests passed and 2 tests failed across 5 spec files.
 
 - **Login and access control:** 7 tests passed.
-- **Products page:** 2 tests passed and 1 test failed. The sorting test failed while comparing expected and actual values for the sorting options. Further investigation is required to determine whether this run reproduces BUG-001.
-- **Shopping cart:** 5 tests passed and 1 test failed. The failure reproduces the known Bolt T-Shirt Add to Cart defect (BUG-002).
+- **Products page:** 2 tests passed and 1 test failed. The sorting regression test failed for the **Price: High to Low** option, reproducing BUG-001.
+- **Shopping cart:** 5 tests passed and 1 test failed. The Bolt T-Shirt Add to Cart test reproduced BUG-002.
 - **Checkout:** 9 tests passed.
 - **Mobile responsive:** 2 tests passed.
 
-**Known defects:** BUG-001 (Price: High to Low sorting) and BUG-002 (Bolt T-Shirt Add to Cart) remain open pending investigation and retesting.
+**Known defects:** BUG-001 (Price: High to Low sorting) and BUG-002 (Bolt T-Shirt Add to Cart) remain open pending application fixes and retesting.
 
-**Note:** Results reflect the latest reported run. Re-run the affected tests after any changes.
+Tests for known defects are intentionally retained as regression tests. Their assertions should not be weakened to produce a passing result.
+
+**Note:** Results reflect the latest reported full-suite run. Re-run the affected tests after application or automation changes.
+
+## Future Test Ideas
+
+- Invalid login credentials and empty login fields.
+- Cart persistence after navigation or page refresh.
+- Additional checkout edge cases and order confirmation validation.
+- Additional viewport sizes and responsive layout checks.
+- Additional product and quantity combinations for pricing calculations.
+
 
 ## Future Test Ideas
 
