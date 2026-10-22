@@ -12,17 +12,12 @@ class LoginPage {
   }
 
   // Navigation
-  async open() {
-    const url = "https://qa-task--oyettijon.replit.app";
-
-    console.log(`Navigating to: ${url}`);
-    await browser.url(url);
-
-    console.log(`Current URL: ${await browser.getUrl()}`);
+  async open(): Promise<void> {
+    await browser.url("/");
   }
 
   // Page inspection
-  async logFormElements() {
+  async logFormElements(): Promise<void> {
     console.log("Inspecting input fields...");
 
     const inputs = await this.inputs;
@@ -53,21 +48,17 @@ class LoginPage {
   }
 
   // Practice account selection
-  async selectPracticeAccount(account: string) {
+  async selectPracticeAccount(account: string): Promise<void> {
     const accountButton = $(
       `[data-test="hint-user-${account}"]`
     );
 
-    console.log(`Selecting practice account: ${account}`);
-
     await expect(accountButton).toBeDisplayed();
     await accountButton.click();
-
-    console.log(`Selected practice account: ${account}`);
   }
 
   // Login
-  async login() {
+  async login(): Promise<void> {
     const loginButton = $('[data-test="login-button"]');
 
     await expect(loginButton).toBeDisplayed();
@@ -75,7 +66,7 @@ class LoginPage {
   }
 
   // Logout
-  async logout() {
+  async logout(): Promise<void> {
     const logoutButton = $('[data-test="logout-button"]');
 
     await expect(logoutButton).toBeDisplayed();

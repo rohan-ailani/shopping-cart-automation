@@ -2,9 +2,6 @@
 import { $, $$, browser, expect } from "@wdio/globals";
 
 class CartPage {
-  private readonly cartUrl =
-    "https://qa-task--oyettijon.replit.app/cart";
-
   // Selectors
   get cartNavigation() {
     return $('[data-test="nav-cart"]');
@@ -56,8 +53,12 @@ class CartPage {
 
   // Navigation
   async openCart(): Promise<void> {
+    await this.cartNavigation.waitForClickable();
     await this.cartNavigation.click();
-    await expect(browser).toHaveUrl(this.cartUrl);
+
+    await expect(browser).toHaveUrl(
+      "https://qa-task--oyettijon.replit.app/cart"
+    );
   }
 
   // Cart information
@@ -70,14 +71,20 @@ class CartPage {
       return 0;
     }
 
-    return Number(await this.cartBadge.getText());
+    const count = Number(await this.cartBadge.getText());
+
+    if (!Number.isInteger(count) || count < 0) {
+      throw new Error(`Invalid cart badge count: ${count}`);
+    }
+
+    return count;
   }
 
   async getProductNames(): Promise<string[]> {
     const names: string[] = [];
 
     for (const element of await this.cartItemNames) {
-      names.push(await element.getText());
+      names.push((await element.getText()).trim());
     }
 
     return names;
@@ -105,9 +112,17 @@ class CartPage {
       `[data-test="quantity-item-${productId}"]`
     );
 
-    await quantityElement.waitForExist({ timeout: 10000 });
+    await quantityElement.waitForDisplayed();
 
-    return Number(await quantityElement.getText());
+    const quantity = Number(await quantityElement.getText());
+
+    if (!Number.isInteger(quantity) || quantity < 1) {
+      throw new Error(
+        `Invalid quantity for product "${productId}": ${quantity}`
+      );
+    }
+
+    return quantity;
   }
 
   // Quantity and item actions
@@ -120,6 +135,7 @@ class CartPage {
       );
     }
 
+    await button.waitForClickable();
     await button.click();
   }
 
@@ -132,6 +148,7 @@ class CartPage {
       );
     }
 
+    await button.waitForClickable();
     await button.click();
   }
 
@@ -144,15 +161,24 @@ class CartPage {
       );
     }
 
-    await button.waitForDisplayed();
+    await button.waitForClickable();
     await button.click();
   }
 
   // Price calculations
   private parsePrice(priceText: string): number {
-    return Number(
-      priceText.replace(/[$,]/g, "").replace(" each", "").trim()
-    );
+    const normalizedPrice = priceText
+      .replace(/[$,]/g, "")
+      .replace(" each", "")
+      .trim();
+
+    const price = Number(normalizedPrice);
+
+    if (!normalizedPrice || !Number.isFinite(price)) {
+      throw new Error(`Unable to parse price: "${priceText}"`);
+    }
+
+    return price;
   }
 
   async getSubtotal(): Promise<number> {

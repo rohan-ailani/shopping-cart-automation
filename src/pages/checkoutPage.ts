@@ -60,26 +60,35 @@ class CheckoutPage {
   }
 
   // Page actions
-  async openCheckout() {
+  async openCheckout(): Promise<void> {
     await browser.url("/checkout");
+    await this.checkoutPage.waitForDisplayed();
   }
 
   async enterShippingInformation(
     firstName: string,
     lastName: string,
     postalCode: string
-  ) {
+  ): Promise<void> {
+    await this.firstNameInput.waitForDisplayed();
     await this.firstNameInput.setValue(firstName);
     await this.lastNameInput.setValue(lastName);
     await this.postalCodeInput.setValue(postalCode);
   }
 
-  async continueToSummary() {
+  async continueToSummary(): Promise<void> {
+    await this.continueButton.waitForClickable();
     await this.continueButton.click();
   }
 
-  async goBackToCart() {
+  async goBackToCart(): Promise<void> {
+    await this.backToCartButton.waitForClickable();
     await this.backToCartButton.click();
+  }
+
+  async finishOrder(): Promise<void> {
+    await this.finishButton.waitForClickable();
+    await this.finishButton.click();
   }
 }
 

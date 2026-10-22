@@ -7,6 +7,14 @@ class StorePage {
     return $$('[data-test="inventory-item"]');
   }
 
+  get productNames() {
+    return $$('[data-test="inventory-item-name"]');
+  }
+
+  get productPrices() {
+    return $$('[data-test="inventory-item-price"]');
+  }
+
   get categoryFilter() {
     return $('[data-test="filter-category"]');
   }
@@ -16,8 +24,8 @@ class StorePage {
   }
 
   // Navigation
-  async open() {
-    await browser.url("https://qa-task--oyettijon.replit.app");
+  async open(): Promise<void> {
+    await browser.url("/");
   }
 
   // Product information
@@ -26,28 +34,46 @@ class StorePage {
   }
 
   async getProductNames(): Promise<string[]> {
-    const names = await $$('[data-test="inventory-item-name"]');
-    const productNames: string[] = [];
+    const cards = await this.productCards;
 
-    for (const name of names) {
-      productNames.push(await name.getText());
+    if (await cards.length === 0) {
+      return [];
     }
 
-    return productNames;
+    await cards[0].waitForDisplayed();
+
+    const names: string[] = [];
+
+    for (const element of await this.productNames) {
+      names.push((await element.getText()).trim());
+    }
+
+    return names;
   }
 
   async getProductPrices(): Promise<number[]> {
-    const priceElements = await $$(
-      '[data-test="inventory-item-price"]'
-    );
+    const cards = await this.productCards;
+
+    if (await cards.length === 0) {
+      return [];
+    }
+
+    await cards[0].waitForDisplayed();
 
     const prices: number[] = [];
 
-    for (const priceElement of priceElements) {
-      const priceText = await priceElement.getText();
-      const price = Number(
-        priceText.replace("$", "").replace(",", "")
-      );
+    for (const element of await this.productPrices) {
+      const priceText = await element.getText();
+      const normalizedPrice = priceText
+        .replace(/[$,]/g, "")
+        .trim();
+      const price = Number(normalizedPrice);
+
+      if (!normalizedPrice || !Number.isFinite(price)) {
+        throw new Error(
+          `Unable to parse product price: "${priceText}"`
+        );
+      }
 
       prices.push(price);
     }
@@ -56,20 +82,25 @@ class StorePage {
   }
 
   // Product filtering and sorting
-  async filterByCategory(category: string) {
+  async filterByCategory(category: string): Promise<void> {
     await this.categoryFilter.selectByAttribute(
       "value",
       category
     );
   }
 
-  async sortBy(option: string) {
+  async sortBy(option: string): Promise<void> {
     await this.sortSelect.selectByAttribute("value", option);
   }
 
   // Cart actions
   async addProductToCart(productId: string): Promise<void> {
-    await $(`[data-test="add-to-cart-${productId}"]`).click();
+    const addToCartButton = $(
+      `[data-test="add-to-cart-${productId}"]`
+    );
+
+    await addToCartButton.waitForClickable();
+    await addToCartButton.click();
   }
 }
 
