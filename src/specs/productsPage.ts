@@ -46,7 +46,7 @@ it("should filter products by every category and verify counts", async () => {
   }
 });
 
-
+ // BUG-001: Price: High to Low Sort Displays Products in Ascending Price Order
 it("should sort products correctly using every sorting option", async () => {
   const failures: string[] = [];
 
