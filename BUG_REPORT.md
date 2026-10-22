@@ -6,7 +6,7 @@
 **Severity:** Medium  
 **Priority:** High  
 **Category:** Products Page / Sorting  
-**Environment:** Chrome, WebdriverIO + TypeScript  
+**Environment:** Chrome, WebdriverIO, TypeScript  
 **Application:** [Shopping Cart QA Task](https://qa-task--oyettijon.replit.app/)
 
 ### Summary
@@ -37,7 +37,7 @@ Example:
 
 ### Actual Result
 
-Products remain sorted in ascending order, from lowest to highest.
+Products are displayed in ascending price order, from lowest to highest.
 
 Observed order:
 
@@ -49,56 +49,93 @@ Users who select **Price: High to Low** cannot reliably find the most expensive 
 
 ### Testing Evidence
 
-The automated WebdriverIO sorting test fails when comparing the expected descending price sequence against the actual ascending price sequence.
-
 - **Test suite:** `src/specs/productsPage.ts`
 - **Test case:** `should sort products correctly using every sorting option`
-- **Assertion:** Expected descending prices; received ascending prices.
+- **Assertion:** Expected descending prices but received ascending prices.
 - **Result:** Failed
+
+The automated test reproduces the incorrect sorting behavior.
 
 ### Recommendation
 
 Investigate the application's price-sorting logic and ensure the `price-high` option sorts product prices in descending order.
 
-### Notes
+### Regression Considerations
 
-The **Price: Low to High** option should continue to sort products in ascending order. Verify that correcting the descending sort does not introduce a regression in the ascending sort or the name-sorting options.
+After fixing the defect, verify that:
 
-### BUG-002: Bolt T-Shirt Add to Cart Button Is Unresponsive
+- **Price: High to Low** sorts prices in descending order.
+- **Price: Low to High** continues to sort prices in ascending order.
+- Both name-sorting options continue to work correctly.
 
-- **Severity:** High
-- **Priority:** High
-- **Status:** Open
-- **Area:** Products Page
+---
 
-**Steps to Reproduce**
+## BUG-002: Bolt T-Shirt Add to Cart Button Is Unresponsive
+
+**Status:** Open  
+**Severity:** High  
+**Priority:** High  
+**Category:** Products Page / Shopping Cart  
+**Environment:** Chrome, WebdriverIO, TypeScript  
+**Application:** [Shopping Cart QA Task](https://qa-task--oyettijon.replit.app/)
+
+### Summary
+
+Clicking the **Add to Cart** button for the Bolt T-Shirt ($15.99) produces no visible response. The product is not added to the shopping cart.
+
+### Preconditions
+
+- The application is accessible.
+- The user is logged in with a valid practice account.
+- The Products page displays the Bolt T-Shirt.
+
+### Steps to Reproduce
+
 1. Log in with a valid practice account.
-2. Navigate to the products page.
-3. Locate the Bolt T-Shirt ($15.99).
-4. Click the **Add to Cart** button.
+2. Navigate to the Products page.
+3. Locate the Bolt T-Shirt priced at $15.99.
+4. Click its **Add to Cart** button.
+5. Observe the cart badge and product button state.
 
-**Expected Result**
+### Expected Result
 
-The product is added to the cart, the cart badge updates, and the button reflects the updated state.
+- The product is added to the cart.
+- The cart badge updates to reflect the addition.
+- The button reflects the updated cart state, if applicable.
 
-**Actual Result**
+### Actual Result
 
-Clicking the Add to Cart button produces no visible response. The product is not added to the cart.
+Clicking the Add to Cart button produces no visible response. The product is not added to the cart, and the cart badge remains at zero.
 
-**Automation Evidence**
-- Automated test: `should add the Bolt T-Shirt to the cart`
-- Test file: `src/specs/addToCart.ts`
-- Result: Failed
-- Expected cart badge count: `1`
-- Actual cart badge count: `0`
-- Other cart tests: 5 passed
+### Impact
 
-**Conclusion:** The automated test reproduces the reported issue. Clicking Add to Cart for the Bolt T-Shirt does not update the cart badge as expected.
+Users cannot add the Bolt T-Shirt to their cart through the product listing. This prevents the normal purchase flow for the affected product.
 
-**Affected Element**
+### Testing Evidence
 
-`[data-test="add-to-cart-bolt-t-shirt"]`
+- **Test file:** `src/specs/addToCart.ts`
+- **Test case:** `should add the Bolt T-Shirt to the cart`
+- **Affected element:** `[data-test="add-to-cart-bolt-t-shirt"]`
+- **Expected cart badge count:** `1`
+- **Actual cart badge count:** `0`
+- **Result:** Failed
 
-**Notes**
+The automated test reproduces the issue. The other five shopping cart tests passed in the reported run.
+
+### Recommendation
+
+Investigate the Bolt T-Shirt's Add to Cart event handling and cart update logic. Confirm that clicking the button adds the correct product and updates the cart badge and button state.
+
+### Regression Considerations
+
+After fixing the defect, verify that:
+
+- The Bolt T-Shirt can be added to the cart.
+- The cart badge reflects the updated cart count.
+- The product's cart state updates correctly.
+- Adding and removing other products continues to work.
+- Quantity changes and subtotal, tax, and total calculations remain correct.
+
+### Further Investigation
 
 Verify whether the defect is isolated to the Bolt T-Shirt or affects other products.

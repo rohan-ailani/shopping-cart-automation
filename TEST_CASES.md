@@ -1,4 +1,3 @@
-
 # Test Cases
 
 ## Login and Access Control
@@ -22,7 +21,7 @@
 | TC-PRODUCT-003 | Sort products by name A to Z | Products appear in ascending alphabetical order |
 | TC-PRODUCT-004 | Sort products by name Z to A | Products appear in descending alphabetical order |
 | TC-PRODUCT-005 | Sort prices Low to High | Prices appear in ascending order |
-| TC-PRODUCT-006 | Sort prices High to Low | Prices should appear in descending order |
+| TC-PRODUCT-006 | Sort prices High to Low | Prices appear in descending order |
 
 **Known issue:** TC-PRODUCT-006 detects a sorting defect. See [BUG_REPORT.md](BUG_REPORT.md).
 
@@ -35,11 +34,13 @@
 | TC-CART-003 | Remove a product from the cart | Product is removed and counts are updated |
 | TC-CART-004 | Increase and decrease product quantity | Quantity updates correctly |
 | TC-CART-005 | Verify subtotal, tax, and grand total | Subtotal matches item prices and quantities, tax is calculated at 8%, and grand total is correct |
+| TC-CART-006 | Add Bolt T-Shirt to the cart | Product is added and the cart badge updates to reflect the addition |
 
+**Known issue:** TC-CART-006 reproduces a defect where the Bolt T-Shirt Add to Cart button does not add the product. See [BUG_REPORT.md](BUG_REPORT.md). Keep this test as a regression test; do not weaken the expected result to make it pass.
 
 ## Checkout Tests
 
-| Test Case ID | Test Scenario | Test Steps | Expected Result |
+| ID | Test Scenario | Test Steps | Expected Result |
 |---|---|---|---|
 | TC-CHK-001 | Verify checkout page and shipping form | Navigate to checkout from the cart | Checkout page, shipping fields, and Continue button are displayed |
 | TC-CHK-002 | Verify order preview and total | Open checkout with a product in the cart | Order preview and formatted total are displayed |
@@ -51,19 +52,33 @@
 | TC-CHK-008 | Verify validation when last name is missing | Enter first name and postal code; leave last name empty; click Continue | Last name validation error appears; user remains on checkout page |
 | TC-CHK-009 | Verify validation when postal code is missing | Enter first and last name; leave postal code empty; click Continue | Postal code validation error appears; user remains on checkout page |
 
+## Mobile Responsive Tests
+
+| ID | Test Case | Expected Result |
+|---|---|---|
+| TC-MOB-001 | Verify login and inventory page at a mobile viewport | Login form and inventory page are usable at a 375 × 812 viewport, with no horizontal overflow |
+| TC-MOB-002 | Verify cart and checkout flow at a mobile viewport | Products can be added to the cart, totals are displayed, shipping information can be submitted, and order confirmation is displayed without horizontal overflow |
+
+**Note:** These tests resize the browser viewport to a mobile-sized dimension. They do not represent full physical-device or device-emulation testing.
 
 ## Execution Notes
 
-- Login and access control: 7 tests previously reported passing.
-- Shopping cart: 4 tests passed in the latest reported run.
-- Products page: Price High to Low sorting has a known defect.
+**Latest full-suite run:** 3 spec files passed, 2 spec files failed, out of 5 total.
 
-Run the test suites again to confirm the latest results.
+- **Login and access control:** 7 tests passed.
+- **Products page:** 2 tests passed and 1 test failed. The sorting test failed while comparing expected and actual values for the sorting options. Further investigation is required to determine whether this run reproduces BUG-001.
+- **Shopping cart:** 5 tests passed and 1 test failed. The failure reproduces the known Bolt T-Shirt Add to Cart defect (BUG-002).
+- **Checkout:** 9 tests passed.
+- **Mobile responsive:** 2 tests passed.
 
-## Planned Tests
+**Known defects:** BUG-001 (Price: High to Low sorting) and BUG-002 (Bolt T-Shirt Add to Cart) remain open pending investigation and retesting.
 
-- Invalid login credentials and empty fields
-- Cart persistence between pages
-- Cart subtotal and total calculations
-- Checkout and order confirmation
-- Responsive layout checks
+**Note:** Results reflect the latest reported run. Re-run the affected tests after any changes.
+
+## Future Test Ideas
+
+- Invalid login credentials and empty login fields
+- Cart persistence after navigation or page refresh
+- Additional checkout edge cases and order confirmation validation
+- Additional viewport sizes and responsive layout checks
+- Additional product and quantity combinations for pricing calculations
