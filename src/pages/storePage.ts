@@ -56,6 +56,9 @@ async getProductPrices(): Promise<number[]> {
   return prices;
 }
 
+async addProductToCart(productId: string): Promise<void> {
+  await $(`[data-test="add-to-cart-${productId}"]`).click();
+}
 }
 
 export default new StorePage();
