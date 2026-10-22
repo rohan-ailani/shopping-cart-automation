@@ -103,7 +103,51 @@ Ensure the required WebdriverIO dependencies and browser setup are available bef
 
 ## Running Tests
 
-Run the complete test suite:
+Run the commands below from the project root directory.
+
+### Run the Complete Test Suite
+
+Execute all test suites:
 
 ```bash
 npm run wdio
+```
+
+### Run Individual Test Suites
+
+Run a specific test suite using the corresponding spec file:
+
+**Login and Access Control**
+```bash
+npx wdio run wdio.conf.ts --spec src/specs/accessPage.ts
+```
+
+**Products Page**
+```bash
+npx wdio run wdio.conf.ts --spec src/specs/productsPage.ts
+```
+
+**Add to Cart**
+```bash
+npx wdio run wdio.conf.ts --spec src/specs/addToCart.ts
+```
+
+**Checkout**
+```bash
+npx wdio run wdio.conf.ts --spec src/specs/checkout.ts
+```
+
+**Mobile Responsiveness**
+```bash
+npx wdio run wdio.conf.ts --spec src/specs/mobileResponsive.ts
+```
+
+### Test Results
+
+The test suite runs in Chrome. The full suite can be used for regression testing, while individual suites allow focused testing of specific application workflows.
+
+The current test results include two documented application defects:
+- **BUG-001:** Price sorting from high to low does not work as expected.
+- **BUG-002:** Adding the Bolt T-Shirt to the cart does not update the cart badge.
+
+These tests remain in place to verify the defects once the application is fixed.
