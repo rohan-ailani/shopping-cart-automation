@@ -63,3 +63,42 @@ Investigate the application's price-sorting logic and ensure the `price-high` op
 ### Notes
 
 The **Price: Low to High** option should continue to sort products in ascending order. Verify that correcting the descending sort does not introduce a regression in the ascending sort or the name-sorting options.
+
+### BUG-002: Bolt T-Shirt Add to Cart Button Is Unresponsive
+
+- **Severity:** High
+- **Priority:** High
+- **Status:** Open
+- **Area:** Products Page
+
+**Steps to Reproduce**
+1. Log in with a valid practice account.
+2. Navigate to the products page.
+3. Locate the Bolt T-Shirt ($15.99).
+4. Click the **Add to Cart** button.
+
+**Expected Result**
+
+The product is added to the cart, the cart badge updates, and the button reflects the updated state.
+
+**Actual Result**
+
+Clicking the Add to Cart button produces no visible response. The product is not added to the cart.
+
+**Automation Evidence**
+- Automated test: `should add the Bolt T-Shirt to the cart`
+- Test file: `src/specs/addToCart.ts`
+- Result: Failed
+- Expected cart badge count: `1`
+- Actual cart badge count: `0`
+- Other cart tests: 5 passed
+
+**Conclusion:** The automated test reproduces the reported issue. Clicking Add to Cart for the Bolt T-Shirt does not update the cart badge as expected.
+
+**Affected Element**
+
+`[data-test="add-to-cart-bolt-t-shirt"]`
+
+**Notes**
+
+Verify whether the defect is isolated to the Bolt T-Shirt or affects other products.

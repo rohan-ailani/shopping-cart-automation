@@ -26,6 +26,24 @@ describe("Add to Cart", () => {
     expect(await CartPage.getCartBadgeCount()).toBe(0);
   });
 
+ // BUG-002: Bolt T-Shirt Add to Cart Button Is Unresponsive
+it("should add the Bolt T-Shirt to the cart", async () => {
+  const initialCartCount = await CartPage.getCartBadgeCount();
+
+  await StorePage.addProductToCart("bolt-t-shirt");
+
+  const updatedCartCount = await CartPage.getCartBadgeCount();
+
+  expect(updatedCartCount).toBe(initialCartCount + 1);
+
+  await CartPage.openCart();
+
+  const productNames = await CartPage.getProductNames();
+
+  expect(productNames).toContain("Bolt T-Shirt");
+});
+
+
   it("should add all selected products to the cart", async () => {
     // Arrange
     for (const product of products) {
