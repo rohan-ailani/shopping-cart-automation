@@ -34,6 +34,7 @@
 | TC-CART-002 | Add selected products to the cart | Expected products and item count are displayed |
 | TC-CART-003 | Remove a product from the cart | Product is removed and counts are updated |
 | TC-CART-004 | Increase and decrease product quantity | Quantity updates correctly |
+| TC-CART-005 | Verify subtotal, tax, and grand total | Subtotal matches item prices and quantities, tax is calculated at 8%, and grand total is correct |
 
 ## Execution Notes
 
