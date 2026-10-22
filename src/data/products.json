@@ -1,0 +1,15 @@
+
+[
+  {
+    "id": "sauce-labs-hoodie",
+    "name": "After Hours Hoodie",
+    "price": 44.99,
+    "quantity": 1
+  },
+  {
+    "id": "backpack",
+    "name": "Trailmark Day Pack",
+    "price": 29.99,
+    "quantity": 1
+  }
+]
