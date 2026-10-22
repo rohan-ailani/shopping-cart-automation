@@ -36,6 +36,22 @@
 | TC-CART-004 | Increase and decrease product quantity | Quantity updates correctly |
 | TC-CART-005 | Verify subtotal, tax, and grand total | Subtotal matches item prices and quantities, tax is calculated at 8%, and grand total is correct |
 
+
+## Checkout Tests
+
+| Test Case ID | Test Scenario | Test Steps | Expected Result |
+|---|---|---|---|
+| TC-CHK-001 | Verify checkout page and shipping form | Navigate to checkout from the cart | Checkout page, shipping fields, and Continue button are displayed |
+| TC-CHK-002 | Verify order preview and total | Open checkout with a product in the cart | Order preview and formatted total are displayed |
+| TC-CHK-003 | Verify navigation back to cart | Click the back-to-cart link on checkout | User returns to the cart page |
+| TC-CHK-004 | Submit valid shipping information | Enter a valid first name, last name, and postal code; click Continue | Order summary is displayed with the expected product, quantity, shipping details, subtotal, tax, and total |
+| TC-CHK-005 | Complete an order and verify confirmation | Submit valid shipping information, then click Finish | Order confirmation message and Continue Shopping button are displayed |
+| TC-CHK-006 | Verify validation when all shipping fields are empty | Leave first name, last name, and postal code empty; click Continue | Validation errors appear for all required fields; user remains on checkout page |
+| TC-CHK-007 | Verify validation when first name is missing | Enter last name and postal code; leave first name empty; click Continue | First name validation error appears; user remains on checkout page |
+| TC-CHK-008 | Verify validation when last name is missing | Enter first name and postal code; leave last name empty; click Continue | Last name validation error appears; user remains on checkout page |
+| TC-CHK-009 | Verify validation when postal code is missing | Enter first and last name; leave postal code empty; click Continue | Postal code validation error appears; user remains on checkout page |
+
+
 ## Execution Notes
 
 - Login and access control: 7 tests previously reported passing.
