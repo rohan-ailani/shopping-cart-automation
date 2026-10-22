@@ -13,8 +13,6 @@ describe("Products page", () => {
   });
 
   it("should display the expected total number of products", async () => {
-    console.log("URL after login:", await browser.getUrl());
-
     await expect(browser).toHaveUrl(
       "https://qa-task--oyettijon.replit.app/"
     );
@@ -25,28 +23,29 @@ describe("Products page", () => {
 
     const productCount = await StorePage.getProductCount();
 
-    console.log(`Total products displayed: ${productCount}`);
-
     expect(productCount).toBe(12);
   });
 
-it("should filter products by every category and verify counts", async () => {
-  for (const category of categories) {
-    await StorePage.filterByCategory(category.value);
+  it("should filter products by every category and verify counts", async () => {
+    for (const category of categories) {
+      await StorePage.filterByCategory(category.value);
 
-    const productCount = await StorePage.getProductCount();
-    const productNames = await StorePage.getProductNames();
+      const productCount = await StorePage.getProductCount();
+      const productNames = await StorePage.getProductNames();
 
-    console.log(
-      `${category.name}: ${productCount} products`,
-      productNames
-    );
+      console.log(
+        `${category.name}: ${productCount} products`,
+        productNames
+      );
 
-    expect(productCount).toBe(category.expectedCount);
-  }
-});
+      expect(productCount).toBe(category.expectedCount);
+    }
+  });
 
- // BUG-001: Price: High to Low Sort Displays Products in Ascending Price Order
+  // BUG-001: Price: High to Low sorting defect
+  
+
+
 it("should sort products correctly using every sorting option", async () => {
   const failures: string[] = [];
 

@@ -1,4 +1,6 @@
 
+import { $, $$, browser, expect } from "@wdio/globals";
+
 class CartPage {
   private readonly cartUrl =
     "https://qa-task--oyettijon.replit.app/cart";

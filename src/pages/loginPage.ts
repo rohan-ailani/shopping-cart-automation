@@ -66,23 +66,25 @@ class LoginPage {
     console.log(`Selected practice account: ${account}`);
   }
 
+  // Login
   async login() {
-  const loginButton = $('[data-test="login-button"]');
+    const loginButton = $('[data-test="login-button"]');
 
-  await expect(loginButton).toBeDisplayed();
-  await loginButton.click();
-}
+    await expect(loginButton).toBeDisplayed();
+    await loginButton.click();
+  }
 
-async logout() {
-  const logoutButton = $('[data-test="logout-button"]');
+  // Logout
+  async logout() {
+    const logoutButton = $('[data-test="logout-button"]');
 
-  await expect(logoutButton).toBeDisplayed();
-  await logoutButton.click();
+    await expect(logoutButton).toBeDisplayed();
+    await logoutButton.click();
 
-  await expect(browser).toHaveUrl(
-    "https://qa-task--oyettijon.replit.app/login"
-  );
-}
+    await expect(browser).toHaveUrl(
+      "https://qa-task--oyettijon.replit.app/login"
+    );
+  }
 }
 
 export default new LoginPage();

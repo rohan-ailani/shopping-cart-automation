@@ -1,3 +1,4 @@
+
 import { $, browser, expect } from "@wdio/globals";
 import LoginPage from "../pages/loginPage";
 import accounts from "../data/accounts.json";
@@ -32,50 +33,50 @@ describe("Login page", () => {
     console.log("[Test] Login form inspection completed.");
   });
 
+  it("should populate credentials when selecting the Shopper account", async () => {
+    await LoginPage.selectPracticeAccount("fern_signal");
 
-it("should populate credentials when selecting the Shopper account", async () => {
-  await LoginPage.selectPracticeAccount("fern_signal");
+    const username = $('[data-test="username"]');
+    const password = $('[data-test="password"]');
 
-  const username = $('[data-test="username"]');
-  const password = $('[data-test="password"]');
+    await expect(username).toHaveValue("fern_signal");
+    await expect(password).toHaveValue("test_sauce");
 
-  await expect(username).toHaveValue("fern_signal");
-  await expect(password).toHaveValue("test_sauce");
-
-  console.log("Shopper account credentials populated successfully.");
-});
-
-for (const account of accounts) {
-  it(`should verify login access for ${account.username}`, async () => {
-    console.log(`Testing account: ${account.username}`);
-
-    await LoginPage.selectPracticeAccount(account.username);
-    await LoginPage.login();
-
-    if (account.expectedLogin) {
-      await expect(browser).toHaveUrl(
-        "https://qa-task--oyettijon.replit.app/"
-      );
-
-      await expect($('//*[@id="inventory-page"]')).toBeDisplayed();
-
-      await LoginPage.logout();
-    } else {
-  await expect(browser).toHaveUrl(
-    "https://qa-task--oyettijon.replit.app/login"
-  );
-
-  const loginError = $("p.text-red-700");
-
-  await expect(loginError).toBeDisplayed();
-
-  await expect(loginError).toHaveText(
-    "Epic sadface below — Sorry, this user has been locked out."
-  );
-
-  console.log(`Login correctly denied for: ${account.username}`);
-
-    }
+    console.log("Shopper account credentials populated successfully.");
   });
-}  
+
+  for (const account of accounts) {
+    it(`should verify login access for ${account.username}`, async () => {
+      console.log(`Testing account: ${account.username}`);
+
+      await LoginPage.selectPracticeAccount(account.username);
+      await LoginPage.login();
+
+      if (account.expectedLogin) {
+        await expect(browser).toHaveUrl(
+          "https://qa-task--oyettijon.replit.app/"
+        );
+
+        await expect(
+          $('//*[@id="inventory-page"]')
+        ).toBeDisplayed();
+
+        await LoginPage.logout();
+      } else {
+        await expect(browser).toHaveUrl(
+          "https://qa-task--oyettijon.replit.app/login"
+        );
+
+        const loginError = $("p.text-red-700");
+
+        await expect(loginError).toBeDisplayed();
+
+        await expect(loginError).toHaveText(
+          "Epic sadface below — Sorry, this user has been locked out."
+        );
+
+        console.log(`Login correctly denied for: ${account.username}`);
+      }
+    });
+  }
 });

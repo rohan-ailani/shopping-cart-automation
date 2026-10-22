@@ -1,4 +1,6 @@
 
+import { $, browser } from "@wdio/globals";
+
 class CheckoutPage {
   // Page elements
   get checkoutPage() {
@@ -25,18 +27,17 @@ class CheckoutPage {
     return $('[data-test="checkout-postal-code"]');
   }
 
+  get firstNameError() {
+    return $('[data-test="first-name-error"]');
+  }
 
-get firstNameError() {
-  return $('[data-test="first-name-error"]');
-}
+  get lastNameError() {
+    return $('[data-test="last-name-error"]');
+  }
 
-get lastNameError() {
-  return $('[data-test="last-name-error"]');
-}
-
-get postalCodeError() {
-  return $('[data-test="postal-code-error"]');
-}
+  get postalCodeError() {
+    return $('[data-test="postal-code-error"]');
+  }
 
   get continueButton() {
     return $('[data-test="continue-to-summary"]');
@@ -54,9 +55,9 @@ get postalCodeError() {
     return $('[data-test="checkout-summary-page"]');
   }
 
-get finishButton() {
-  return $('[data-test="finish-button"]');
-}
+  get finishButton() {
+    return $('[data-test="finish-button"]');
+  }
 
   // Page actions
   async openCheckout() {
@@ -79,7 +80,7 @@ get finishButton() {
 
   async goBackToCart() {
     await this.backToCartButton.click();
-  }  
+  }
 }
 
 export default new CheckoutPage();
