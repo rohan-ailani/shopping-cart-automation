@@ -4,6 +4,8 @@ import StorePage from "../pages/storePage";
 import CartPage from "../pages/cartPage";
 import products from "../data/products.json";
 
+const TAX_RATE = 0.08;
+
 describe("Add to Cart", () => {
   beforeEach(async () => {
     await LoginPage.open();
@@ -13,53 +15,39 @@ describe("Add to Cart", () => {
     await expect(
       $('[data-test="inventory-item"]')
     ).toBeDisplayed();
-
-    console.log("Login successful. Inventory page displayed.");
   });
 
   it("should display an empty cart when no products have been added", async () => {
+    // Arrange
     await CartPage.openCart();
 
-    const cartItemCount = await CartPage.getCartItemCount();
-    const cartBadgeCount = await CartPage.getCartBadgeCount();
-
-    console.log(`Cart item count: ${cartItemCount}`);
-    console.log(`Cart badge count: ${cartBadgeCount}`);
-
-    expect(cartItemCount).toBe(0);
-    expect(cartBadgeCount).toBe(0);
+    // Assert
+    expect(await CartPage.getCartItemCount()).toBe(0);
+    expect(await CartPage.getCartBadgeCount()).toBe(0);
   });
 
   it("should add all selected products to the cart", async () => {
-    console.log(`Adding ${products.length} products to the cart.`);
-
+    // Arrange
     for (const product of products) {
       await StorePage.addProductToCart(product.id);
     }
 
-    console.log("All products added. Opening cart.");
-
     await CartPage.openCart();
 
+    // Assert
     const cartItemCount = await CartPage.getCartItemCount();
-
-    console.log(`Cart item count: ${cartItemCount}`);
-
-    expect(cartItemCount).toBe(products.length);
-
     const productNames = await CartPage.getProductNames();
 
+    expect(cartItemCount).toBe(products.length);
     expect(productNames).toHaveLength(products.length);
 
     for (const product of products) {
       expect(productNames).toContain(product.name);
     }
-
-    console.log("PASS: Cart contains all selected products.");
   });
 
   it("should remove a product from the cart", async () => {
-    // Arrange: add all products
+    // Arrange
     for (const product of products) {
       await StorePage.addProductToCart(product.id);
     }
@@ -71,57 +59,72 @@ describe("Add to Cart", () => {
 
     expect(initialCount).toBe(products.length);
 
-    // Act: remove the first product
     const removedProductName = initialNames[0];
 
-    console.log(`Removing product: ${removedProductName}`);
-
+    // Act
     await CartPage.removeItem(0);
 
-    // Assert: verify the cart updates
+    // Assert
     const updatedCount = await CartPage.getCartItemCount();
     const updatedNames = await CartPage.getProductNames();
     const updatedBadgeCount = await CartPage.getCartBadgeCount();
 
-    console.log(`Expected cart count: ${initialCount - 1}`);
-    console.log(`Actual cart count: ${updatedCount}`);
-    console.log(`Updated cart badge: ${updatedBadgeCount}`);
-
     expect(updatedCount).toBe(initialCount - 1);
     expect(updatedBadgeCount).toBe(initialCount - 1);
     expect(updatedNames).not.toContain(removedProductName);
-
-    console.log("PASS: Product removed successfully.");
   });
 
+  it("should increase and decrease product quantity", async () => {
+    // Arrange
+    await StorePage.addProductToCart(products[0].id);
+    await CartPage.openCart();
 
-it("should increase and decrease product quantity", async () => {
-  // Arrange: add products and open cart
-  await StorePage.addProductToCart(products[0].id);
-  await CartPage.openCart();
+    expect(await CartPage.getQuantity(0)).toBe(1);
 
-  const initialQuantity = await CartPage.getQuantity(0);
+    // Act and assert: increase quantity
+    await CartPage.increaseQuantity(0);
 
-  console.log(`Initial quantity: ${initialQuantity}`);
-  expect(initialQuantity).toBe(1);
+    expect(await CartPage.getQuantity(0)).toBe(2);
 
-  // Act: increase quantity
-  await CartPage.increaseQuantity(0);
+    // Act and assert: decrease quantity
+    await CartPage.decreaseQuantity(0);
 
-  const increasedQuantity = await CartPage.getQuantity(0);
+    expect(await CartPage.getQuantity(0)).toBe(1);
+  });
 
-  console.log(`Quantity after increase: ${increasedQuantity}`);
-  expect(increasedQuantity).toBe(2);
+  it("should calculate the correct subtotal, tax, and total", async () => {
+    // Arrange
+    for (const product of products) {
+      await StorePage.addProductToCart(product.id);
+    }
 
-  // Act: decrease quantity
-  await CartPage.decreaseQuantity(0);
+    await CartPage.openCart();
 
-  const decreasedQuantity = await CartPage.getQuantity(0);
+    // Calculate expected subtotal from item prices and quantities
+    const itemCount = await CartPage.getCartItemCount();
+    let expectedSubtotal = 0;
 
-  console.log(`Quantity after decrease: ${decreasedQuantity}`);
-  expect(decreasedQuantity).toBe(1);
+    for (let i = 0; i < itemCount; i++) {
+      const unitPrice = await CartPage.getItemUnitPrice(i);
+      const quantity = await CartPage.getQuantity(i);
 
-  console.log("PASS: Product quantity increased and decreased correctly.");
-});
+      expectedSubtotal += unitPrice * quantity;
+    }
 
+    expectedSubtotal = Number(expectedSubtotal.toFixed(2));
+
+    // Calculate expected tax and total
+    const expectedTax = Number(
+      (expectedSubtotal * TAX_RATE).toFixed(2)
+    );
+
+    const expectedTotal = Number(
+      (expectedSubtotal + expectedTax).toFixed(2)
+    );
+
+    // Assert
+    expect(await CartPage.getSubtotal()).toBe(expectedSubtotal);
+    expect(await CartPage.getTax()).toBe(expectedTax);
+    expect(await CartPage.getTotal()).toBe(expectedTotal);
+  });
 });

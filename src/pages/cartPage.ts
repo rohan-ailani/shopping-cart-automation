@@ -1,5 +1,9 @@
 
 class CartPage {
+  private readonly cartUrl =
+    "https://qa-task--oyettijon.replit.app/cart";
+
+  // Selectors
   get cartNavigation() {
     return $('[data-test="nav-cart"]');
   }
@@ -12,13 +16,49 @@ class CartPage {
     return $$('[data-test="cart-item"]');
   }
 
-  async openCart(): Promise<void> {
-    await this.cartNavigation.click();
-    await expect(browser).toHaveUrl(
-      "https://qa-task--oyettijon.replit.app/cart"
-    );
+  get cartSubtotal() {
+    return $('[data-test="cart-subtotal"]');
   }
 
+  get cartTax() {
+    return $('[data-test="cart-tax"]');
+  }
+
+  get cartTotal() {
+    return $('[data-test="cart-total"]');
+  }
+
+  get cartItemTotals() {
+    return $$('[data-test^="cart-item-total-"]');
+  }
+
+  get cartItemPrices() {
+    return $$('[data-test="cart-item-price"]');
+  }
+
+  get cartItemNames() {
+    return $$('[data-test="cart-item-name"]');
+  }
+
+  get removeButtons() {
+    return $$('[data-test^="remove-item-"]');
+  }
+
+  get increaseButtons() {
+    return $$('[data-test^="increase-qty-item-"]');
+  }
+
+  get decreaseButtons() {
+    return $$('[data-test^="decrease-qty-item-"]');
+  }
+
+  // Navigation
+  async openCart(): Promise<void> {
+    await this.cartNavigation.click();
+    await expect(browser).toHaveUrl(this.cartUrl);
+  }
+
+  // Cart information
   async getCartItemCount(): Promise<number> {
     return this.cartItems.length;
   }
@@ -31,82 +71,123 @@ class CartPage {
     return Number(await this.cartBadge.getText());
   }
 
-  
-async getProductNames(): Promise<string[]> {
-  const nameElements = await $$('[data-test="cart-item-name"]');
-  const names: string[] = [];
+  async getProductNames(): Promise<string[]> {
+    const names: string[] = [];
 
-  for (const element of nameElements) {
-    names.push(await element.getText());
+    for (const element of await this.cartItemNames) {
+      names.push(await element.getText());
+    }
+
+    return names;
   }
 
-  return names;
-}
+  async getQuantity(index = 0): Promise<number> {
+    const item = (await this.cartItems)[index];
 
+    if (!item) {
+      throw new Error(
+        `Cart item at index ${index} was not found.`
+      );
+    }
 
-async getQuantity(index = 0): Promise<number> {
-  const cartItems = await this.cartItems;
-  const item = cartItems[index];
+    const itemId = await item.getAttribute("data-test-item-id");
 
-  if (!item) {
-    throw new Error(`Cart item at index ${index} was not found.`);
+    if (!itemId) {
+      throw new Error(
+        `Missing data-test-item-id for cart item at index ${index}.`
+      );
+    }
+
+    const productId = itemId.replace("cart-item-", "");
+    const quantityElement = $(
+      `[data-test="quantity-item-${productId}"]`
+    );
+
+    await quantityElement.waitForExist({ timeout: 10000 });
+
+    return Number(await quantityElement.getText());
   }
 
-  const itemId = await item.getAttribute("data-test-item-id");
+  // Quantity and item actions
+  async increaseQuantity(index = 0): Promise<void> {
+    const button = (await this.increaseButtons)[index];
 
-  if (!itemId) {
-    throw new Error(
-      `Could not find data-test-item-id for cart item at index ${index}.`
+    if (!button) {
+      throw new Error(
+        `Increase quantity button at index ${index} was not found.`
+      );
+    }
+
+    await button.click();
+  }
+
+  async decreaseQuantity(index = 0): Promise<void> {
+    const button = (await this.decreaseButtons)[index];
+
+    if (!button) {
+      throw new Error(
+        `Decrease quantity button at index ${index} was not found.`
+      );
+    }
+
+    await button.click();
+  }
+
+  async removeItem(index = 0): Promise<void> {
+    const button = (await this.removeButtons)[index];
+
+    if (!button) {
+      throw new Error(
+        `Remove button at index ${index} was not found.`
+      );
+    }
+
+    await button.waitForDisplayed();
+    await button.click();
+  }
+
+  // Price calculations
+  private parsePrice(priceText: string): number {
+    return Number(
+      priceText.replace(/[$,]/g, "").replace(" each", "").trim()
     );
   }
 
-  // Example: cart-item-8 becomes quantity-item-8
-  const productId = itemId.replace("cart-item-", "");
-  const quantityElement = $(`[data-test="quantity-item-${productId}"]`);
-
-  await quantityElement.waitForExist({ timeout: 10000 });
-
-  const quantityText = await quantityElement.getText();
-
-  console.log(`Cart item: ${itemId}`);
-  console.log(`Quantity text: ${quantityText}`);
-
-  return Number(quantityText);
-}
-
-async increaseQuantity(index = 0): Promise<void> {
-  const increaseButtons = $$('[data-test^="increase-qty-item-"]');
-
-  await increaseButtons[index].click();
-}
-
-async decreaseQuantity(index = 0): Promise<void> {
-  const decreaseButtons = $$('[data-test^="decrease-qty-item-"]');
-
-  await decreaseButtons[index].click();
-}
-
-
-async removeItem(index = 0): Promise<void> {
-  const itemCount = await this.getCartItemCount();
-
-  console.log(`Cart items found: ${itemCount}`);
-  console.log(`Attempting to remove item at index: ${index}`);
-
-  if (index < 0 || index >= itemCount) {
-    throw new Error(
-      `Invalid cart item index: ${index}. Cart items: ${itemCount}`
-    );
+  async getSubtotal(): Promise<number> {
+    return this.parsePrice(await this.cartSubtotal.getText());
   }
 
-  const removeButtons = await $$('[data-test^="remove-item-"]');
-  const removeButton = removeButtons[index];
+  async getTax(): Promise<number> {
+    return this.parsePrice(await this.cartTax.getText());
+  }
 
-  await removeButton.waitForDisplayed();
-  await removeButton.click();
+  async getTotal(): Promise<number> {
+    return this.parsePrice(await this.cartTotal.getText());
+  }
 
-  console.log(`Clicked remove button for cart item ${index}`);
-}
+  async getItemUnitPrice(index = 0): Promise<number> {
+    const priceElement = (await this.cartItemPrices)[index];
+
+    if (!priceElement) {
+      throw new Error(
+        `Unit price at index ${index} was not found.`
+      );
+    }
+
+    return this.parsePrice(await priceElement.getText());
+  }
+
+  async getItemTotal(index = 0): Promise<number> {
+    const totalElement = (await this.cartItemTotals)[index];
+
+    if (!totalElement) {
+      throw new Error(
+        `Item total at index ${index} was not found.`
+      );
+    }
+
+    return this.parsePrice(await totalElement.getText());
+  }
 }
 
 export default new CartPage();
